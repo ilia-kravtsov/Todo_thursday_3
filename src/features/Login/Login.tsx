@@ -25,6 +25,7 @@ const validate = (values : any) => {
     }
 
     if (!values.password) {
+
         errors.password = 'Required'
     } else if (values.password.length < 4) {
         errors.password = 'Password should be more then 3 symbols'
@@ -47,7 +48,7 @@ export const Login = () => {
             alert(JSON.stringify(values, null, 2));
         },
     });
-    console.log(formik.errors)
+
     return <Grid container justifyContent={'center'}>
         <Grid item justifyContent={'center'}>
             <form onSubmit={formik.handleSubmit}>
