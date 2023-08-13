@@ -1,4 +1,6 @@
 import axios, { AxiosResponse } from 'axios'
+import {FormikErrorType} from "../features/Login/Login";
+import {speedDialActionClasses} from "@mui/material";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -36,6 +38,15 @@ export const todolistsAPI = {
     }
 }
 
+export const authAPI = {
+    me() {
+        return instance.get<ResponseType<UserType>>('auth/me');
+    },
+    login(logData: LoginType) {
+        return instance.post<ResponseType<{ userId: number }>, AxiosResponse<ResponseType<{ userId: number }>>, LoginType>('auth/login', logData)
+    }
+}
+
 // types
 export type TodolistType = {
     id: string
@@ -49,15 +60,12 @@ export type ResponseType<D = {}> = {
     fieldsErrors: Array<string>
     data: D
 }
-
-
 export enum TaskStatuses {
     New = 0,
     InProgress = 1,
     Completed = 2,
     Draft = 3
 }
-
 export enum TaskPriorities {
     Low = 0,
     Middle = 1,
@@ -65,14 +73,11 @@ export enum TaskPriorities {
     Urgently = 3,
     Later = 4
 }
-
 export enum ResultCode {
     OK,
     ERROR,
     ERROR_CAPTCHA = 10,
 }
-
-
 export type TaskType = {
     description: string
     title: string
@@ -97,4 +102,14 @@ type GetTasksResponse = {
     error: string | null
     totalCount: number
     items: TaskType[]
+}
+export type LoginType = {
+    email: string
+    password: string
+    rememberMe: boolean
+}
+export type UserType = {
+    id: number
+    email: string
+    login: string
 }

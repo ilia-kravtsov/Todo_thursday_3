@@ -1,13 +1,19 @@
 import {setErrorAC, setErrorACType, setRequestStatusAC, setRequestStatusACType} from "../app/app-reducer";
 import {Dispatch} from "redux";
-import {ResponseType} from "../api/todolists-api";
+import {ResponseType, TaskType, TodolistType, UserType} from "../api/todolists-api";
+import {ActionsType} from "../features/TodolistsList/tasks-reducer";
+
+type handleServerAppErrorDataType = ResponseType<{ item: TaskType }>
+    | ResponseType<{ item: TodolistType }>
+    | ResponseType<{ userId: number }>
+    | ResponseType<UserType>
 
 export const handleServerNetworkError = (dispatch: Dispatch<ErrorUtilsDispatchType>, error: string) => {
     dispatch(setRequestStatusAC('failed'))
     dispatch(setErrorAC(error))
 }
 
-export const  handleServerAppError = <T>(dispatch: Dispatch<ErrorUtilsDispatchType>, data: ResponseType<T>) => {
+export const  handleServerAppError = <T>(dispatch: Dispatch<ActionsType>, data: handleServerAppErrorDataType) => {
     if (data.messages.length) {
         dispatch(setErrorAC(data.messages[0]))
     } else {
